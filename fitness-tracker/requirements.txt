@@ -20,3 +20,5 @@ plotly==5.19.0
 gunicorn==21.2.0
 python-dateutil==2.8.2
 requests==2.31.0
+flask
+mysql-connector-python
