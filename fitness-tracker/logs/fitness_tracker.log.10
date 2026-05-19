@@ -1,0 +1,89 @@
+2025-05-17 20:55:28,190 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 20:56:10,742 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 20:56:12,927 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 20:57:23,543 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 20:58:06,623 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 20:58:16,989 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 20:58:57,961 INFO: Current user: 2, username: tharun [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:18]
+2025-05-17 20:58:57,969 INFO: User is physician: False [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:23]
+2025-05-17 20:58:57,980 INFO: Total consultations in database: 0 [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:27]
+2025-05-17 20:58:57,981 INFO: User is a patient [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:52]
+2025-05-17 20:58:57,992 INFO: Filtered query found 0 consultations [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:58]
+2025-05-17 20:59:23,158 INFO: Current user: 2, username: tharun [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:18]
+2025-05-17 20:59:23,161 INFO: User is physician: False [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:23]
+2025-05-17 20:59:23,164 INFO: Total consultations in database: 0 [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:27]
+2025-05-17 20:59:23,164 INFO: User is a patient [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:52]
+2025-05-17 20:59:23,168 INFO: Filtered query found 0 consultations [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:58]
+2025-05-17 20:59:26,190 INFO: Current user: 2, username: tharun [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:18]
+2025-05-17 20:59:26,193 INFO: User is physician: False [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:23]
+2025-05-17 20:59:26,196 INFO: Total consultations in database: 0 [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:27]
+2025-05-17 20:59:26,197 INFO: User is a patient [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:52]
+2025-05-17 20:59:26,200 INFO: Filtered query found 0 consultations [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:58]
+2025-05-17 21:01:18,599 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 21:01:33,381 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 21:03:56,788 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 21:05:48,764 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 21:07:17,732 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 21:08:06,871 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 21:09:21,139 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 21:09:23,337 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 21:10:11,020 INFO: Current user: 2, username: tharun [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:18]
+2025-05-17 21:10:11,021 ERROR: Error in consultation_index: Entity namespace for "physicians" has no property "user_id" [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:79]
+2025-05-17 21:10:11,021 ERROR: Error type: <class 'sqlalchemy.exc.InvalidRequestError'> [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:80]
+2025-05-17 21:10:11,022 ERROR: Error args: ('Entity namespace for "physicians" has no property "user_id"',) [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:81]
+2025-05-17 21:10:11,029 ERROR: Traceback: Traceback (most recent call last):
+  File "C:\Users\Tharun\OneDrive\Documents\fitness-tracker\venv\Lib\site-packages\sqlalchemy\sql\base.py", line 2181, in _entity_namespace_key
+    return getattr(ns, key)  # type: ignore
+AttributeError: type object 'Physician' has no attribute 'user_id'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py", line 21, in consultation_index
+    physician = Physician.query.filter_by(user_id=current_user.id).first()
+                ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Tharun\OneDrive\Documents\fitness-tracker\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 1992, in filter_by
+    _entity_namespace_key(from_entity, key) == value
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Tharun\OneDrive\Documents\fitness-tracker\venv\Lib\site-packages\sqlalchemy\sql\base.py", line 2183, in _entity_namespace_key
+    raise exc.InvalidRequestError(
+        'Entity namespace for "%s" has no property "%s"' % (entity, key)
+    ) from err
+sqlalchemy.exc.InvalidRequestError: Entity namespace for "physicians" has no property "user_id"
+ [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:82]
+2025-05-17 21:10:48,738 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 21:11:17,958 INFO: Current user: 2, username: tharun [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:21]
+2025-05-17 21:11:17,960 ERROR: Error in consultation_index: Entity namespace for "physicians" has no property "user_id" [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:82]
+2025-05-17 21:11:17,961 ERROR: Error type: <class 'sqlalchemy.exc.InvalidRequestError'> [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:83]
+2025-05-17 21:11:17,961 ERROR: Error args: ('Entity namespace for "physicians" has no property "user_id"',) [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:84]
+2025-05-17 21:11:17,969 ERROR: Traceback: Traceback (most recent call last):
+  File "C:\Users\Tharun\OneDrive\Documents\fitness-tracker\venv\Lib\site-packages\sqlalchemy\sql\base.py", line 2181, in _entity_namespace_key
+    return getattr(ns, key)  # type: ignore
+AttributeError: type object 'Physician' has no attribute 'user_id'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py", line 24, in consultation_index
+    physician = Physician.query.filter_by(user_id=current_user.id).first()
+                ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Tharun\OneDrive\Documents\fitness-tracker\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 1992, in filter_by
+    _entity_namespace_key(from_entity, key) == value
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Tharun\OneDrive\Documents\fitness-tracker\venv\Lib\site-packages\sqlalchemy\sql\base.py", line 2183, in _entity_namespace_key
+    raise exc.InvalidRequestError(
+        'Entity namespace for "%s" has no property "%s"' % (entity, key)
+    ) from err
+sqlalchemy.exc.InvalidRequestError: Entity namespace for "physicians" has no property "user_id"
+ [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:85]
+2025-05-17 21:11:36,752 INFO: Current user: 2, username: tharun [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:21]
+2025-05-17 21:11:36,753 ERROR: Error in consultation_index: Entity namespace for "physicians" has no property "user_id" [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:82]
+2025-05-17 21:11:36,754 ERROR: Error type: <class 'sqlalchemy.exc.InvalidRequestError'> [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:83]
+2025-05-17 21:11:36,754 ERROR: Error args: ('Entity namespace for "physicians" has no property "user_id"',) [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:84]
+2025-05-17 21:12:27,316 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 21:14:17,183 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 21:14:19,773 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-17 21:14:46,385 INFO: Current user: 2, username: tharun [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:21]
+2025-05-17 21:14:46,392 INFO: User is physician: False [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:26]
+2025-05-17 21:14:46,398 INFO: Total consultations in database: 0 [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:30]
+2025-05-17 21:14:46,399 INFO: User is a patient [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:55]

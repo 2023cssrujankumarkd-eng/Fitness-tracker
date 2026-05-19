@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{% block title %}Fitness Tracker{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/api.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+    <script>
+        // Add CSRF token to all AJAX requests
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            if (token) {
+                // Add CSRF token to all fetch requests
+                const originalFetch = window.fetch;
+                window.fetch = function() {
+                    let [resource, config] = arguments;
+                    if (config === undefined) {
+                        config = {};
+                    }
+                    if (config.headers === undefined) {
+                        config.headers = {};
+                    }
+                    config.headers['X-CSRF-Token'] = token;
+                    return originalFetch(resource, config);
+                };
+
+                // Add CSRF token to all XMLHttpRequest
+                const originalXHR = window.XMLHttpRequest;
+                window.XMLHttpRequest = function() {
+                    const xhr = new originalXHR();
+                    const originalOpen = xhr.open;
+                    xhr.open = function() {
+                        originalOpen.apply(xhr, arguments);
+                        xhr.setRequestHeader('X-CSRF-Token', token);
+                    };
+                    return xhr;
+                };
+            }
+
+            // API endpoints
+            const API_ENDPOINTS = {
+                activities: '/api/activities',
+                goals: '/api/goals',
+                nutrition: {
+                    foodItems: '/api/food-items',
+                    nutritionLog: '/api/nutrition-log',
+                    nutritionStats: '/api/nutrition-stats'
+                },
+                workouts: '/api/workouts',
+                consultations: '/api/consultations'
+            };
+
+            // Utility functions
+            function handleApiError(error) {
+                console.error('API Error:', error);
+                const message = error.response?.data?.message || 'An error occurred';
+                showNotification(message, 'error');
+            }
+
+            function showNotification(message, type = 'success') {
+                const notification = document.createElement('div');
+                notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg ${
+                    type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
+                }`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                setTimeout(() => notification.remove(), 5000);
+            }
+
+            function handleImageError(img) {
+                img.onerror = null;
+                img.src = "{{ url_for('static', filename='images/placeholder.png') }}";
+            }
+
+            // Dark mode toggle
+            function toggleDarkMode() {
+                document.documentElement.classList.toggle('dark');
+                localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+            }
+
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'true' || 
+                (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+        });
+    </script>
+</head>
+<body class="h-full bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <!-- Mobile menu overlay -->
+    <div id="mobileMenu" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo and primary nav -->
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="/" class="flex items-center">
+                            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Fitness Tracker Logo" class="h-8 w-8 mr-2">
+                            <span class="font-semibold text-gray-700 dark:text-white text-lg">Fitness Tracker</span>
+                        </a>
+                    </div>
+                    
+                    <!-- Desktop navigation -->
+                    {% if current_user.is_authenticated %}
+                    <div class="hidden md:flex md:items-center md:space-x-4 ml-10">
+                        <a href="{{ url_for('main.dashboard') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-green-500 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <i class="fas fa-chart-line mr-1"></i> Dashboard
+                        </a>
+                        <a href="{{ url_for('activities.activity_index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-green-500 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <i class="fas fa-running mr-1"></i> Activities
+                        </a>
+                        <a href="{{ url_for('workout.workout_index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-green-500 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <i class="fas fa-dumbbell mr-1"></i> Workouts
+                        </a>
+                        <a href="{{ url_for('nutrition.nutrition_page') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-green-500 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <i class="fas fa-apple-alt mr-1"></i> Nutrition
+                        </a>
+                        <a href="{{ url_for('goals.goal_index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-green-500 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <i class="fas fa-bullseye mr-1"></i> Goals
+                        </a>
+                        <a href="{{ url_for('consultations.consultation_index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-green-500 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <i class="fas fa-comment-medical mr-1"></i> Consultations
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Right side navigation -->
+                <div class="flex items-center">
+                    <!-- Search bar -->
+                    <div class="hidden md:flex items-center mr-4">
+                        <div class="relative">
+                            <input type="text" id="navbarSearchInput" placeholder="Search..." 
+                                class="w-40 px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
+                            <button id="searchButton" class="absolute right-2 top-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                                <i class="fas fa-search text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dark mode toggle -->
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 mr-2">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+
+                    {% if current_user.is_authenticated %}
+                    <!-- User profile dropdown -->
+                    <div class="relative ml-3" x-data="{ open: false }">
+                        <button onclick="document.getElementById('userMenu').classList.toggle('hidden')" 
+                            class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <img class="h-8 w-8 rounded-full" src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="User avatar">
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-200">{{ current_user.username }}</span>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </button>
+                        <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
+                            <div class="py-1">
+                                <a href="{{ url_for('main.settings') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <i class="fas fa-cog mr-2"></i> Settings
+                                </a>
+                                <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="flex items-center space-x-4">
+                        <a href="{{ url_for('auth.login') }}" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-green-500 dark:hover:text-green-400">
+                            Login
+                        </a>
+                        <a href="{{ url_for('auth.register') }}" class="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600">
+                            Register
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    <!-- Mobile menu button -->
+                    <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden'); document.getElementById('mobileNav').classList.toggle('translate-x-0')" 
+                        class="md:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile navigation -->
+        <div id="mobileNav" class="fixed inset-y-0 right-0 w-64 bg-white dark:bg-gray-800 shadow-lg transform translate-x-full transition-transform duration-200 ease-in-out z-50">
+            <div class="p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-white">Menu</h2>
+                    <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden'); document.getElementById('mobileNav').classList.toggle('translate-x-0')" 
+                        class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                {% if current_user.is_authenticated %}
+                <nav class="space-y-2">
+                    <a href="{{ url_for('main.dashboard') }}" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                        <i class="fas fa-chart-line mr-2"></i> Dashboard
+                    </a>
+                    <a href="{{ url_for('activities.activity_index') }}" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                        <i class="fas fa-running mr-2"></i> Activities
+                    </a>
+                    <a href="{{ url_for('workout.workout_index') }}" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                        <i class="fas fa-dumbbell mr-2"></i> Workouts
+                    </a>
+                    <a href="{{ url_for('nutrition.nutrition_page') }}" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                        <i class="fas fa-apple-alt mr-2"></i> Nutrition
+                    </a>
+                    <a href="{{ url_for('goals.goal_index') }}" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                        <i class="fas fa-bullseye mr-2"></i> Goals
+                    </a>
+                    <a href="{{ url_for('consultations.consultation_index') }}" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                        <i class="fas fa-comment-medical mr-2"></i> Consultations
+                    </a>
+                </nav>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash messages -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="mb-4 p-4 rounded-lg shadow-sm {% if category == 'error' %}bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200{% else %}bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200{% endif %} flex items-center">
+                        <i class="fas {% if category == 'error' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %} mr-2"></i>
+                        {{ message }}
+                        <button onclick="this.parentElement.remove()" class="ml-auto text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-gray-800 shadow-lg mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-white mb-4">Fitness Tracker</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Track your fitness journey and achieve your goals.</p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold text-gray-700 dark:text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="{{ url_for('main.dashboard') }}" class="text-gray-600 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400">Dashboard</a></li>
+                        <li><a href="{{ url_for('activities.activity_index') }}" class="text-gray-600 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400">Activities</a></li>
+                        <li><a href="{{ url_for('workout.workout_index') }}" class="text-gray-600 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400">Workouts</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold text-gray-700 dark:text-white mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400">Help Center</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold text-gray-700 dark:text-white mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                <p class="text-center text-gray-600 dark:text-gray-300">&copy; 2024 Fitness Tracker. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+    document.getElementById('searchButton').addEventListener('click', () => {
+        const searchQuery = document.getElementById('navbarSearchInput').value;
+        if (searchQuery) {
+            window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(searchQuery)}`, '_blank');
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`, '_blank');
+        }
+    });
+
+    // Clear search input on backspace
+    document.getElementById('navbarSearchInput').addEventListener('keydown', (event) => {
+        if (event.key === 'Backspace') {
+            document.getElementById('navbarSearchInput').value = '';
+        }
+    });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

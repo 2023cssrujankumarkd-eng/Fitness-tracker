@@ -1,0 +1,196 @@
+/* Custom styles */
+.activity-card {
+    transition: transform 0.2s;
+}
+
+.activity-card:hover {
+    transform: translateY(-5px);
+}
+
+.nutrition-entry {
+    border-left: 4px solid #10B981;
+}
+
+.goal-progress {
+    width: 100%;
+    height: 8px;
+    background-color: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.goal-progress-bar {
+    height: 100%;
+    background-color: #10b981;
+    transition: width 0.3s ease;
+}
+
+.consultation-card {
+    border-left: 4px solid #3B82F6;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Interactive elements */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-in-out;
+}
+
+.scale-in {
+    animation: scaleIn 0.3s ease-in-out;
+}
+
+/* Progress bars */
+.progress-bar {
+    transition: width 0.5s ease-in-out;
+    background: linear-gradient(90deg, #4F46E5, #7C3AED);
+}
+
+/* Form validation */
+.validation-feedback {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Interactive cards */
+.card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal animations */
+.modal {
+    transition: opacity 0.3s ease-in-out;
+}
+
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Toast notifications */
+.toast {
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Loading states */
+.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Interactive buttons */
+.btn {
+    transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Image loading states */
+.image-loading {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.image-loaded {
+    opacity: 1;
+}
+
+/* Add to your existing CSS */
+img {
+    object-fit: cover;
+    object-position: center;
+}
+
+.activity-card img,
+.nutrition-entry img,
+.goal-progress img {
+    border-radius: 50%;
+    background-color: #f3f4f6;
+}
+
+/* Add hover effects */
+.activity-card:hover img,
+.nutrition-entry:hover img,
+.goal-progress:hover img {
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Add to your existing CSS */
+.image-loading {
+    position: relative;
+    background-color: #f3f4f6;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.image-loading::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Add this to your existing CSS */
+img[src=""] {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIGZpbGw9IiNGM0Y0RjYiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTYiPj88L3RleHQ+PC9zdmc+');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+

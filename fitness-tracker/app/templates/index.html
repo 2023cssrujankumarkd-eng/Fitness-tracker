@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="relative bg-gradient-to-r from-green-500 to-green-600 dark:from-green-600 dark:to-green-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div class="text-center">
+            <h1 class="text-4xl font-extrabold text-white sm:text-5xl md:text-6xl">
+                Your Personal Fitness Journey
+            </h1>
+            <p class="mt-6 text-xl text-green-100 max-w-3xl mx-auto">
+                Track workouts, monitor nutrition, set goals, and get expert guidance - all in one place.
+            </p>
+            <div class="mt-10 flex justify-center space-x-4">
+                <a href="{{ url_for('auth.register') }}" class="px-8 py-3 border border-transparent text-base font-medium rounded-md text-green-600 bg-white hover:bg-green-50 md:py-4 md:text-lg md:px-10">
+                    Get Started
+                </a>
+                <a href="{{ url_for('auth.login') }}" class="px-8 py-3 border border-white text-base font-medium rounded-md text-white hover:bg-green-500 md:py-4 md:text-lg md:px-10">
+                    Sign In
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="py-16 bg-white dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
+                Everything You Need to Succeed
+            </h2>
+            <p class="mt-4 text-lg text-gray-600 dark:text-gray-300">
+                Comprehensive tools and features to help you achieve your fitness goals
+            </p>
+        </div>
+
+        <div class="mt-20 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <!-- Workout Tracking -->
+            <div class="relative p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="text-green-500 dark:text-green-400 text-4xl mb-4">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Smart Workout Tracking</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Track your workouts with our intelligent timer, exercise library, and progress monitoring.
+                </p>
+            </div>
+
+            <!-- Nutrition Tracking -->
+            <div class="relative p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="text-green-500 dark:text-green-400 text-4xl mb-4">
+                    <i class="fas fa-apple-alt"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Nutrition Management</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Log meals, track calories, and get personalized nutrition recommendations.
+                </p>
+            </div>
+
+            <!-- Goal Setting -->
+            <div class="relative p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="text-green-500 dark:text-green-400 text-4xl mb-4">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Goal Achievement</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Set, track, and achieve your fitness goals with our smart goal-setting system.
+                </p>
+            </div>
+
+            <!-- Expert Guidance -->
+            <div class="relative p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="text-green-500 dark:text-green-400 text-4xl mb-4">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Expert Guidance</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Get personalized advice and consultations from fitness experts.
+                </p>
+            </div>
+
+            <!-- Progress Analytics -->
+            <div class="relative p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="text-green-500 dark:text-green-400 text-4xl mb-4">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Progress Analytics</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Visualize your progress with detailed charts and analytics.
+                </p>
+            </div>
+
+            <!-- Community Support -->
+            <div class="relative p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="text-green-500 dark:text-green-400 text-4xl mb-4">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Community Support</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Connect with others, share achievements, and stay motivated together.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Testimonials Section -->
+<div class="bg-gray-50 dark:bg-gray-900 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
+                What Our Users Say
+            </h2>
+        </div>
+        <div class="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <!-- Testimonial 1 -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                <div class="flex items-center mb-4">
+                    <img class="h-12 w-12 rounded-full" src="{{ url_for('static', filename='images/avatar1.jpg') }}" alt="User avatar">
+                    <div class="ml-4">
+                        <h4 class="text-lg font-bold text-gray-900 dark:text-white">Sarah Johnson</h4>
+                        <p class="text-gray-600 dark:text-gray-300">Lost 20kg in 6 months</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300">
+                    "This app has completely transformed my fitness journey. The workout tracking and nutrition features are amazing!"
+                </p>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                <div class="flex items-center mb-4">
+                    <img class="h-12 w-12 rounded-full" src="{{ url_for('static', filename='images/avatar2.jpg') }}" alt="User avatar">
+                    <div class="ml-4">
+                        <h4 class="text-lg font-bold text-gray-900 dark:text-white">Mike Chen</h4>
+                        <p class="text-gray-600 dark:text-gray-300">Gained 10kg muscle</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300">
+                    "The expert guidance and progress tracking helped me achieve my muscle gain goals faster than I expected."
+                </p>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                <div class="flex items-center mb-4">
+                    <img class="h-12 w-12 rounded-full" src="{{ url_for('static', filename='images/avatar3.jpg') }}" alt="User avatar">
+                    <div class="ml-4">
+                        <h4 class="text-lg font-bold text-gray-900 dark:text-white">Emma Davis</h4>
+                        <p class="text-gray-600 dark:text-gray-300">Marathon Runner</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300">
+                    "The workout plans and progress analytics are perfect for my marathon training. Highly recommended!"
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Download App Section -->
+<div class="bg-green-600 dark:bg-green-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center">
+            <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
+                Get the Mobile App
+            </h2>
+            <p class="mt-4 text-lg text-green-100">
+                Download our mobile app for a better experience
+            </p>
+            <div class="mt-8 flex justify-center space-x-4">
+                <a href="#" class="flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-green-600 bg-white hover:bg-green-50">
+                    <i class="fab fa-google-play text-2xl mr-2"></i>
+                    <div class="text-left">
+                        <div class="text-xs">GET IT ON</div>
+                        <div class="text-sm font-semibold">Google Play</div>
+                    </div>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-green-600 bg-white hover:bg-green-50">
+                    <i class="fab fa-apple text-2xl mr-2"></i>
+                    <div class="text-left">
+                        <div class="text-xs">Download on the</div>
+                        <div class="text-sm font-semibold">App Store</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

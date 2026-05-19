@@ -1,0 +1,347 @@
+{% extends "base.html" %}
+
+{% block title %}Workout Timer - Fitness Tracker{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Timer Header -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Upper Body Strength</h1>
+                <p class="text-gray-600 dark:text-gray-300">45 minutes • 12 exercises</p>
+            </div>
+            <button onclick="window.history.back()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+        <div class="flex items-center justify-center">
+            <div class="text-center">
+                <div class="h-48 w-48 rounded-full border-8 border-green-500 flex items-center justify-center mx-auto mb-6">
+                    <div class="text-center">
+                        <span class="text-5xl font-bold text-gray-900 dark:text-white" id="timer">25:00</span>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Current Exercise</p>
+                    </div>
+                </div>
+                <div class="flex space-x-4">
+                    <button id="startTimer" class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                        <i class="fas fa-play mr-2"></i>
+                        Start
+                    </button>
+                    <button id="pauseTimer" class="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600" disabled>
+                        <i class="fas fa-pause mr-2"></i>
+                        Pause
+                    </button>
+                    <button id="resetTimer" class="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600" disabled>
+                        <i class="fas fa-redo mr-2"></i>
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exercise List -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Current Exercise -->
+        <div class="lg:col-span-2">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">Current Exercise</h2>
+                <div class="flex items-center space-x-6">
+                    <div class="h-24 w-24 rounded-xl bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                        <i class="fas fa-dumbbell text-4xl text-blue-600 dark:text-blue-400"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Bench Press</h3>
+                        <p class="text-gray-600 dark:text-gray-300">3 sets • 12 reps</p>
+                        <div class="mt-2 flex items-center space-x-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-weight text-gray-500 dark:text-gray-400 mr-2"></i>
+                                <span class="text-gray-700 dark:text-gray-300">60kg</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-clock text-gray-500 dark:text-gray-400 mr-2"></i>
+                                <span class="text-gray-700 dark:text-gray-300">45s rest</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Progress</h4>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div class="bg-green-600 h-2 rounded-full" style="width: 60%"></div>
+                    </div>
+                    <div class="mt-2 flex justify-between text-sm text-gray-500 dark:text-gray-400">
+                        <span>Set 2 of 3</span>
+                        <span>8 of 12 reps</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercise List -->
+        <div class="lg:col-span-1">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">Workout Plan</h2>
+                <div class="space-y-4">
+                    <!-- Completed Exercise -->
+                    <div class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div class="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mr-3">
+                            <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-medium text-gray-900 dark:text-white">Warm-up</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">5 minutes</p>
+                        </div>
+                        <span class="text-sm text-green-600 dark:text-green-400">Completed</span>
+                    </div>
+
+                    <!-- Current Exercise -->
+                    <div class="flex items-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-2 border-blue-500">
+                        <div class="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-3">
+                            <i class="fas fa-dumbbell text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-medium text-gray-900 dark:text-white">Bench Press</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">3 sets • 12 reps</p>
+                        </div>
+                        <span class="text-sm text-blue-600 dark:text-blue-400">In Progress</span>
+                    </div>
+
+                    <!-- Upcoming Exercises -->
+                    <div class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div class="h-10 w-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mr-3">
+                            <i class="fas fa-dumbbell text-gray-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-medium text-gray-900 dark:text-white">Shoulder Press</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">3 sets • 10 reps</p>
+                        </div>
+                        <span class="text-sm text-gray-400">Up Next</span>
+                    </div>
+
+                    <div class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div class="h-10 w-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mr-3">
+                            <i class="fas fa-dumbbell text-gray-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-medium text-gray-900 dark:text-white">Tricep Extensions</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">3 sets • 15 reps</p>
+                        </div>
+                        <span class="text-sm text-gray-400">Up Next</span>
+                    </div>
+
+                    <div class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div class="h-10 w-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mr-3">
+                            <i class="fas fa-dumbbell text-gray-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-medium text-gray-900 dark:text-white">Bicep Curls</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">3 sets • 12 reps</p>
+                        </div>
+                        <span class="text-sm text-gray-400">Up Next</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workout Stats -->
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Time Elapsed</p>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1" id="elapsedTime">15:30</h3>
+                </div>
+                <div class="h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                    <i class="fas fa-clock text-blue-600 dark:text-blue-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Calories Burned</p>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1" id="caloriesBurned">250</h3>
+                </div>
+                <div class="h-12 w-12 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center">
+                    <i class="fas fa-fire text-orange-600 dark:text-orange-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Exercises Completed</p>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1" id="exercisesCompleted">2/12</h3>
+                </div>
+                <div class="h-12 w-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                    <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let timer;
+    let startTime;
+    let elapsedTime = 0;
+    let isRunning = false;
+    let isPaused = false;
+    let pauseStartTime;
+    let totalPausedTime = 0;
+    let currentExerciseTime = 25 * 60; // 25 minutes in seconds
+    let totalWorkoutTime = 45 * 60; // 45 minutes in seconds
+
+    const timerDisplay = document.getElementById('timer');
+    const startButton = document.getElementById('startTimer');
+    const pauseButton = document.getElementById('pauseTimer');
+    const resetButton = document.getElementById('resetTimer');
+    const elapsedTimeDisplay = document.getElementById('elapsedTime');
+    const caloriesBurnedDisplay = document.getElementById('caloriesBurned');
+    const exercisesCompletedDisplay = document.getElementById('exercisesCompleted');
+
+    function updateTimer() {
+        const currentTime = Date.now();
+        const totalElapsedTime = elapsedTime + (currentTime - startTime - totalPausedTime);
+        const hours = Math.floor(totalElapsedTime / 3600000);
+        const minutes = Math.floor((totalElapsedTime % 3600000) / 60000);
+        const seconds = Math.floor((totalElapsedTime % 60000) / 1000);
+
+        // Update main timer
+        timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        
+        // Update elapsed time
+        const elapsedMinutes = Math.floor(totalElapsedTime / 60000);
+        const elapsedSeconds = Math.floor((totalElapsedTime % 60000) / 1000);
+        elapsedTimeDisplay.textContent = `${String(elapsedMinutes).padStart(2, '0')}:${String(elapsedSeconds).padStart(2, '0')}`;
+
+        // Update calories burned (rough estimate: 10 calories per minute)
+        const caloriesBurned = Math.floor(totalElapsedTime / 60000 * 10);
+        caloriesBurnedDisplay.textContent = caloriesBurned;
+
+        // Check if workout is complete
+        if (totalElapsedTime >= totalWorkoutTime * 1000) {
+            stopTimer();
+            playAlarm();
+        }
+    }
+
+    function startTimer() {
+        if (!isRunning) {
+            isRunning = true;
+            isPaused = false;
+            startTime = Date.now();
+            timer = setInterval(updateTimer, 1000);
+            startButton.disabled = true;
+            pauseButton.disabled = false;
+            resetButton.disabled = false;
+        } else if (isPaused) {
+            isPaused = false;
+            totalPausedTime += Date.now() - pauseStartTime;
+            timer = setInterval(updateTimer, 1000);
+            startButton.disabled = true;
+            pauseButton.disabled = false;
+        }
+    }
+
+    function pauseTimer() {
+        if (isRunning && !isPaused) {
+            isPaused = true;
+            clearInterval(timer);
+            pauseStartTime = Date.now();
+            startButton.disabled = false;
+            pauseButton.disabled = true;
+        }
+    }
+
+    function resetTimer() {
+        clearInterval(timer);
+        isRunning = false;
+        isPaused = false;
+        elapsedTime = 0;
+        totalPausedTime = 0;
+        timerDisplay.textContent = '25:00';
+        elapsedTimeDisplay.textContent = '00:00';
+        caloriesBurnedDisplay.textContent = '0';
+        startButton.disabled = false;
+        pauseButton.disabled = true;
+        resetButton.disabled = true;
+    }
+
+    function stopTimer() {
+        clearInterval(timer);
+        isRunning = false;
+        isPaused = false;
+        startButton.disabled = false;
+        pauseButton.disabled = true;
+        resetButton.disabled = true;
+    }
+
+    function playAlarm() {
+        const audio = new Audio('/static/sounds/alarm.mp3');
+        audio.play().catch(e => console.log('Audio play failed:', e));
+        
+        if ('Notification' in window) {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    new Notification('Workout Complete!', {
+                        body: 'Great job! Your workout session has ended.',
+                        icon: '/static/images/logo.png'
+                    });
+                }
+            });
+        }
+    }
+
+    // Event Listeners
+    startButton.addEventListener('click', startTimer);
+    pauseButton.addEventListener('click', pauseTimer);
+    resetButton.addEventListener('click', resetTimer);
+
+    // Initialize button states
+    pauseButton.disabled = true;
+    resetButton.disabled = true;
+
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.code === 'Space') {
+            e.preventDefault();
+            if (!isRunning) {
+                startTimer();
+            } else if (!isPaused) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        } else if (e.code === 'Escape') {
+            resetTimer();
+        }
+    });
+});
+</script>
+
+<style>
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,590 @@
+{% extends "base.html" %}
+
+{% block title %}Goals - Fitness Tracker{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Goals</h1>
+            <p class="mt-2 text-gray-600 dark:text-gray-300">Track and achieve your fitness goals</p>
+        </div>
+        <button onclick="showAddGoalModal()" 
+            class="mt-4 md:mt-0 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+            <i class="fas fa-plus mr-2"></i>
+            Add Goal
+        </button>
+    </div>
+
+    <!-- Goals Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Active Goals</p>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ goals|length }}</h3>
+                </div>
+                <div class="h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                    <i class="fas fa-bullseye text-blue-600 dark:text-blue-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Completed Goals</p>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ completed_goals|default(0) }}</h3>
+                </div>
+                <div class="h-12 w-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                    <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Success Rate</p>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ success_rate|default('0%') }}</h3>
+                </div>
+                <div class="h-12 w-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                    <i class="fas fa-chart-line text-purple-600 dark:text-purple-400"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Goals List -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% if goals %}
+            {% for goal in goals %}
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-goal-id="{{ goal.id }}">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="h-10 w-10 rounded-full bg-{{ goal.type|lower }}-100 dark:bg-{{ goal.type|lower }}-900 flex items-center justify-center">
+                                <i class="fas fa-{% if goal.type|lower == 'weight loss' %}weight{% elif goal.type|lower == 'muscle gain' %}dumbbell{% elif goal.type|lower == 'endurance' %}running{% else %}spa{% endif %} text-{{ goal.type|lower }}-600 dark:text-{{ goal.type|lower }}-400"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ goal.name }}</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">{{ goal.type|title }} • Due {{ goal.deadline.strftime('%b %d, %Y') }}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-{% if goal.progress >= 100 %}green{% else %}blue{% endif %}-100 text-{% if goal.progress >= 100 %}green{% else %}blue{% endif %}-800">
+                                {{ goal.progress|round }}%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-500 dark:text-gray-400">Progress</span>
+                                <span class="text-gray-900 dark:text-white font-medium">{{ goal.current_value }}/{{ goal.target_value }}</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: '{{ goal.progress|round }}%'"></div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-500 dark:text-gray-400">Time Remaining</span>
+                            <span class="text-gray-900 dark:text-white font-medium">{{ (goal.deadline - now).days }} days</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-700 px-6 py-3 flex justify-end space-x-3">
+                    <button onclick="editGoal('{{ goal.id }}')" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button onclick="deleteGoal('{{ goal.id }}')" class="text-red-600 hover:text-red-900">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-span-full">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 text-center">
+                    <div class="h-16 w-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-bullseye text-3xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No Goals Set</h3>
+                    <p class="text-gray-500 dark:text-gray-400 mb-4">Start your fitness journey by setting your first goal</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+<!-- Add Goal Modal -->
+<div id="addGoalModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+        <div class="mt-3">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Add New Goal</h3>
+                <button onclick="hideAddGoalModal()" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="addGoalForm" class="space-y-4">
+                {{ csrf_token() }}
+                <div>
+                    <label for="goalName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Goal Name</label>
+                    <input type="text" id="goalName" name="name" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+                        placeholder="e.g., Lose 10kg, Run 5km">
+                </div>
+                <div>
+                    <label for="goalType" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Goal Type</label>
+                    <select id="goalType" name="type" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white">
+                        <option value="">Select a goal type</option>
+                        <option value="weight_loss">Weight Loss</option>
+                        <option value="muscle_gain">Muscle Gain</option>
+                        <option value="endurance">Endurance</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="targetValue" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Target Value</label>
+                    <input type="number" id="targetValue" name="target_value" step="0.1" min="0" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white">
+                </div>
+                <div>
+                    <label for="currentValue" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Current Value</label>
+                    <input type="number" id="currentValue" name="current_value" step="0.1" min="0" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white">
+                </div>
+                <div>
+                    <label for="deadline" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Deadline</label>
+                    <input type="date" id="deadline" name="deadline" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white">
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="hideAddGoalModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Cancel</button>
+                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Save Goal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Goal Modal -->
+<div id="editGoalModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+        <div class="mt-3">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Edit Goal</h3>
+                <button onclick="hideEditGoalModal()" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="editGoalForm" class="space-y-4">
+                {{ csrf_token() }}
+                <input type="hidden" name="goal_id" id="editGoalId">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Goal Type</label>
+                    <select name="type" id="editGoalType" required class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-green-500 focus:ring-green-500 dark:bg-gray-700 dark:text-white">
+                        <option value="weight_loss">Weight Loss</option>
+                        <option value="muscle_gain">Muscle Gain</option>
+                        <option value="endurance">Endurance</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Target Value</label>
+                    <input type="number" name="target_value" id="editTargetValue" required class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-green-500 focus:ring-green-500 dark:bg-gray-700 dark:text-white">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Current Value</label>
+                    <input type="number" name="current_value" id="editCurrentValue" required class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-green-500 focus:ring-green-500 dark:bg-gray-700 dark:text-white">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Deadline</label>
+                    <input type="date" name="deadline" id="editDeadline" required class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-green-500 focus:ring-green-500 dark:bg-gray-700 dark:text-white">
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="hideEditGoalModal()" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                        Update Goal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const addGoalForm = document.getElementById('addGoalForm');
+    if (addGoalForm) {
+        addGoalForm.addEventListener('submit', handleAddGoal);
+    }
+    loadGoals(); // Load goals when page loads
+});
+
+function loadGoals() {
+    fetch('/goals/api/goals')
+        .then(response => response.json())
+        .then(goals => {
+            updateGoalsDisplay(goals);
+        })
+        .catch(error => {
+            console.error('Error loading goals:', error);
+            showFlashMessage('Error loading goals', 'error');
+        });
+}
+
+function getGoalIcon(type) {
+    switch(type) {
+        case 'weight_loss': return 'weight';
+        case 'muscle_gain': return 'dumbbell';
+        case 'endurance': return 'running';
+        default: return 'spa';
+    }
+}
+
+function getGoalColor(type) {
+    switch(type) {
+        case 'weight_loss': return 'red';
+        case 'muscle_gain': return 'blue';
+        case 'endurance': return 'purple';
+        default: return 'gray';
+    }
+}
+
+function formatGoalType(type) {
+    return type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
+
+function calculateProgress(goal) {
+    if (goal.type === 'weight_loss') {
+        // For weight loss, progress increases as current value decreases
+        const totalToLose = goal.target_value;
+        const lost = goal.target_value - goal.current_value;
+        return Math.min(Math.round((lost / totalToLose) * 100), 100);
+    } else if (goal.type === 'muscle_gain') {
+        // For muscle gain, progress increases as current value increases
+        return Math.min(Math.round((goal.current_value / goal.target_value) * 100), 100);
+    } else if (goal.type === 'endurance') {
+        // For endurance, progress increases as current value increases
+        return Math.min(Math.round((goal.current_value / goal.target_value) * 100), 100);
+    }
+    return 0;
+}
+
+function getProgressLabel(goal) {
+    if (goal.type === 'weight_loss') {
+        return `Lost ${(goal.target_value - goal.current_value).toFixed(1)}/${goal.target_value} kg`;
+    } else if (goal.type === 'muscle_gain') {
+        return `Gained ${goal.current_value.toFixed(1)}/${goal.target_value} kg`;
+    } else if (goal.type === 'endurance') {
+        return `${goal.current_value.toFixed(1)}/${goal.target_value} km`;
+    }
+    return `${goal.current_value}/${goal.target_value}`;
+}
+
+function updateGoalsDisplay(goals) {
+    const goalsContainer = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3.gap-6');
+    const activeGoalsCount = document.querySelector('.bg-white.dark\\:bg-gray-800.rounded-xl.shadow-lg.p-6:nth-child(1) h3');
+    const completedGoalsCount = document.querySelector('.bg-white.dark\\:bg-gray-800.rounded-xl.shadow-lg.p-6:nth-child(2) h3');
+    const successRate = document.querySelector('.bg-white.dark\\:bg-gray-800.rounded-xl.shadow-lg.p-6:nth-child(3) h3');
+
+    // Update stats
+    const completedGoals = goals.filter(goal => calculateProgress(goal) >= 100).length;
+    const successRateValue = goals.length > 0 ? Math.round((completedGoals / goals.length) * 100) : 0;
+
+    activeGoalsCount.textContent = goals.length;
+    completedGoalsCount.textContent = completedGoals;
+    successRate.textContent = `${successRateValue}%`;
+
+    // Update goals list
+    if (goals.length === 0) {
+        goalsContainer.innerHTML = `
+            <div class="col-span-full">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 text-center">
+                    <div class="h-16 w-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-bullseye text-3xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No Goals Set</h3>
+                    <p class="text-gray-500 dark:text-gray-400 mb-4">Start your fitness journey by setting your first goal</p>
+                    <button onclick="showAddGoalModal()" 
+                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        <i class="fas fa-plus mr-2"></i>
+                        Add Your First Goal
+                    </button>
+                </div>
+            </div>`;
+        return;
+    }
+
+    goalsContainer.innerHTML = goals.map(goal => {
+        const progress = calculateProgress(goal);
+        const isCompleted = progress >= 100;
+        const goalColor = getGoalColor(goal.type);
+        const progressWidth = Math.min(progress, 100);
+        const daysRemaining = calculateDaysRemaining(goal.deadline);
+        const isOverdue = daysRemaining < 0;
+        
+        return `
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden ${isCompleted ? 'border-2 border-green-500' : ''}" data-goal-id="${goal.id}">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <div class="h-10 w-10 rounded-full bg-${goalColor}-100 dark:bg-${goalColor}-900 flex items-center justify-center">
+                            <i class="fas fa-${getGoalIcon(goal.type)} text-${goalColor}-600 dark:text-${goalColor}-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white">${goal.name}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">${formatGoalType(goal.type)} • Due ${formatDate(goal.deadline)}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        ${isCompleted ? 
+                            `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <i class="fas fa-check-circle mr-1"></i>Completed
+                            </span>` :
+                            `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-${goalColor}-100 text-${goalColor}-800">
+                                ${progress}%
+                            </span>`
+                        }
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-500 dark:text-gray-400">Progress</span>
+                            <span class="text-gray-900 dark:text-white font-medium">${getProgressLabel(goal)}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                            <div class="bg-${goalColor}-600 h-2 rounded-full transition-all duration-500" style="width: ${progressWidth}%"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500 dark:text-gray-400">Time Remaining</span>
+                        <span class="text-gray-900 dark:text-white font-medium ${isOverdue ? 'text-red-600' : ''}">
+                            ${isOverdue ? 
+                                `<i class="fas fa-exclamation-circle mr-1"></i>Overdue by ${Math.abs(daysRemaining)} days` : 
+                                `${daysRemaining} days`
+                            }
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-700 px-6 py-3 flex justify-end space-x-3">
+                ${!isCompleted ? `
+                    <button onclick="completeGoal('${goal.id}')" class="text-green-600 hover:text-green-900">
+                        <i class="fas fa-check-circle"></i>
+                        <span class="ml-1">Mark Complete</span>
+                    </button>
+                    <button onclick="editGoal('${goal.id}')" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                ` : ''}
+                <button onclick="deleteGoal('${goal.id}')" class="text-red-600 hover:text-red-900">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function calculateDaysRemaining(deadline) {
+    const today = new Date();
+    const deadlineDate = new Date(deadline);
+    const diffTime = deadlineDate - today;
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+}
+
+function showAddGoalModal() {
+    document.getElementById('addGoalModal').classList.remove('hidden');
+}
+
+function hideAddGoalModal() {
+    document.getElementById('addGoalModal').classList.add('hidden');
+}
+
+function showEditGoalModal() {
+    document.getElementById('editGoalModal').classList.remove('hidden');
+}
+
+function hideEditGoalModal() {
+    document.getElementById('editGoalModal').classList.add('hidden');
+}
+
+function showFlashMessage(message, type = 'success') {
+    const flashDiv = document.createElement('div');
+    flashDiv.className = `fixed top-4 right-4 p-4 rounded-md ${
+        type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+    }`;
+    flashDiv.textContent = message;
+    document.body.appendChild(flashDiv);
+    setTimeout(() => flashDiv.remove(), 3000);
+}
+
+function getCSRFToken() {
+    return document.querySelector('input[name="csrf_token"]').value;
+}
+
+function handleAddGoal(event) {
+    event.preventDefault();
+    console.log('Form submission started');
+
+    const formData = new FormData(event.target);
+    const data = {
+        name: formData.get('name'),
+        type: formData.get('type'),
+        target_value: parseFloat(formData.get('target_value')),
+        current_value: parseFloat(formData.get('current_value')),
+        deadline: formData.get('deadline')
+    };
+
+    console.log('Raw form data:', data);
+
+    // Validate data
+    if (!data.name || !data.type || !data.target_value || !data.current_value || !data.deadline) {
+        showFlashMessage('All fields are required', 'error');
+        return;
+    }
+
+    if (isNaN(data.target_value) || isNaN(data.current_value) || data.target_value <= 0 || data.current_value <= 0) {
+        showFlashMessage('Target and current values must be positive numbers', 'error');
+        return;
+    }
+
+    console.log('Sending data to server:', data);
+
+    fetch('/goals/api/goals', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Server response:', data);
+        if (data.message) {
+            showFlashMessage(data.message);
+            hideAddGoalModal();
+            loadGoals(); // Refresh goals after adding
+        } else {
+            showFlashMessage('Error adding goal', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showFlashMessage('Error adding goal', 'error');
+    });
+}
+
+function editGoal(goalId) {
+    fetch(`/goals/api/goals/${goalId}`)
+        .then(response => response.json())
+        .then(goal => {
+            document.getElementById('editGoalId').value = goal.id;
+            document.getElementById('editGoalType').value = goal.type;
+            document.getElementById('editTargetValue').value = goal.target_value;
+            document.getElementById('editCurrentValue').value = goal.current_value;
+            document.getElementById('editDeadline').value = goal.deadline.split('T')[0];
+            showEditGoalModal();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showFlashMessage('Error loading goal', 'error');
+        });
+}
+
+function deleteGoal(goalId) {
+    if (!confirm('Are you sure you want to delete this goal?')) {
+        return;
+    }
+
+    fetch(`/goals/api/goals/${goalId}`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': getCSRFToken()
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            showFlashMessage(data.message);
+            loadGoals(); // Refresh goals after deleting
+        } else {
+            showFlashMessage('Error deleting goal', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showFlashMessage('Error deleting goal', 'error');
+    });
+}
+
+function completeGoal(goalId) {
+    if (!confirm('Are you sure you want to mark this goal as completed?')) {
+        return;
+    }
+
+    fetch(`/goals/api/goals/${goalId}/complete`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCSRFToken()
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            showFlashMessage(data.message);
+            loadGoals(); // Refresh goals after completing
+        } else {
+            showFlashMessage('Error completing goal', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showFlashMessage('Error completing goal', 'error');
+    });
+}
+
+document.getElementById('editGoalForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const goalId = document.getElementById('editGoalId').value;
+    const formData = new FormData(event.target);
+    const data = {
+        type: formData.get('type'),
+        target_value: parseFloat(formData.get('target_value')),
+        current_value: parseFloat(formData.get('current_value')),
+        deadline: formData.get('deadline')
+    };
+
+    fetch(`/goals/api/goals/${goalId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            showFlashMessage(data.message);
+            hideEditGoalModal();
+            loadGoals(); // Refresh goals after updating
+        } else {
+            showFlashMessage('Error updating goal', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showFlashMessage('Error updating goal', 'error');
+    });
+});
+</script>
+{% endblock %}

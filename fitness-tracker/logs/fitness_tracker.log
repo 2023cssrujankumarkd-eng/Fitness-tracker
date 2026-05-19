@@ -1,0 +1,43 @@
+2025-05-18 23:03:31,105 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-18 23:05:22,129 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-18 23:06:48,015 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-18 23:08:18,353 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-18 23:08:50,447 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-18 23:08:52,610 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-18 23:09:23,441 INFO: Current user: 5, username: tharun [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:21]
+2025-05-18 23:09:23,446 ERROR: Error in consultation_index: (pymysql.err.OperationalError) (1054, "Unknown column 'physicians.name' in 'field list'")
+[SQL: SELECT physicians.id AS physicians_id, physicians.user_id AS physicians_user_id, physicians.name AS physicians_name, physicians.specialty AS physicians_specialty, physicians.bio AS physicians_bio, physicians.created_at AS physicians_created_at, physicians.updated_at AS physicians_updated_at 
+FROM physicians 
+WHERE physicians.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'user_id_1': 5, 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:82]
+2025-05-18 23:09:23,447 ERROR: Error type: <class 'sqlalchemy.exc.OperationalError'> [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:83]
+2025-05-18 23:09:23,448 ERROR: Error args: ('(pymysql.err.OperationalError) (1054, "Unknown column \'physicians.name\' in \'field list\'")',) [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:84]
+2025-05-18 23:31:08,625 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-18 23:31:10,599 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-18 23:31:40,322 INFO: Current user: 5, username: tharun [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:21]
+2025-05-18 23:31:40,328 ERROR: Error in consultation_index: (pymysql.err.OperationalError) (1054, "Unknown column 'physicians.name' in 'field list'")
+[SQL: SELECT physicians.id AS physicians_id, physicians.user_id AS physicians_user_id, physicians.name AS physicians_name, physicians.specialty AS physicians_specialty, physicians.bio AS physicians_bio, physicians.created_at AS physicians_created_at, physicians.updated_at AS physicians_updated_at 
+FROM physicians 
+WHERE physicians.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'user_id_1': 5, 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:82]
+2025-05-18 23:31:40,329 ERROR: Error type: <class 'sqlalchemy.exc.OperationalError'> [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:83]
+2025-05-18 23:31:40,330 ERROR: Error args: ('(pymysql.err.OperationalError) (1054, "Unknown column \'physicians.name\' in \'field list\'")',) [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:84]
+2025-05-18 23:32:16,510 INFO: Fitness Tracker startup [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\__init__.py:56]
+2025-05-18 23:33:57,694 INFO: Current user: 5, username: tharun [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:21]
+2025-05-18 23:33:57,698 ERROR: Error in consultation_index: (pymysql.err.OperationalError) (1054, "Unknown column 'physicians.name' in 'field list'")
+[SQL: SELECT physicians.id AS physicians_id, physicians.user_id AS physicians_user_id, physicians.name AS physicians_name, physicians.specialty AS physicians_specialty, physicians.bio AS physicians_bio, physicians.created_at AS physicians_created_at, physicians.updated_at AS physicians_updated_at 
+FROM physicians 
+WHERE physicians.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'user_id_1': 5, 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:82]
+2025-05-18 23:33:57,699 ERROR: Error type: <class 'sqlalchemy.exc.OperationalError'> [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:83]
+2025-05-18 23:33:57,699 ERROR: Error args: ('(pymysql.err.OperationalError) (1054, "Unknown column \'physicians.name\' in \'field list\'")',) [in C:\Users\Tharun\OneDrive\Documents\fitness-tracker\app\routes\consultations.py:84]
+2026-05-19 14:46:30,089 INFO: Fitness Tracker startup [in C:\Users\Srujan Kumar K\OneDrive\Desktop\fitness-tracker\fitness-tracker\app\__init__.py:56]
+2026-05-19 14:47:40,173 INFO: Fitness Tracker startup [in C:\Users\Srujan Kumar K\OneDrive\Desktop\fitness-tracker\fitness-tracker\app\__init__.py:56]
+2026-05-19 14:48:38,466 INFO: Fitness Tracker startup [in C:\Users\Srujan Kumar K\OneDrive\Desktop\fitness-tracker\fitness-tracker\app\__init__.py:56]
+2026-05-19 14:48:41,962 INFO: Fitness Tracker startup [in C:\Users\Srujan Kumar K\OneDrive\Desktop\fitness-tracker\fitness-tracker\app\__init__.py:56]

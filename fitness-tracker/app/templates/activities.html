@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block title %}Activities - Fitness Tracker{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Activity Feed</h1>
+
+    <!-- Recent Workouts Summary -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Recent Workouts</h2>
+        {% if workouts %}
+            <ul class="space-y-4">
+                {% for workout in workouts[:3] %}
+                    <li class="border-b border-gray-200 dark:border-gray-700 pb-4">
+                        <p class="text-gray-900 dark:text-white"><strong>Workout:</strong> {{ workout.name }}</p>
+                        <p class="text-gray-600 dark:text-gray-400"><strong>Duration:</strong> {{ workout.duration }} minutes</p>
+                        <p class="text-gray-600 dark:text-gray-400"><strong>Date:</strong> {{ workout.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-600 dark:text-gray-400">No recent workouts found. <a href="{{ url_for('workout.workout_index') }}" class="text-green-600 hover:text-green-700">Start a workout</a>!</p>
+        {% endif %}
+    </div>
+
+    <!-- Analytics Section -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Your Weekly Activity</h2>
+        <canvas id="activityChart" class="w-full h-40"></canvas>
+        <p class="text-gray-500 text-sm mt-2">(Analytics chart placeholder. Integrate Chart.js or similar for real data.)</p>
+    </div>
+
+    <!-- Activity Feed -->
+    <div class="space-y-6 mb-24">
+        {% for activity in activities %}
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 flex items-center gap-4 activity-card">
+            <!-- Icon -->
+            <div class="flex-shrink-0">
+                {% if activity.type.lower() == 'running' %}
+                <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-100">
+                    <i class="fas fa-running text-green-600 text-2xl"></i>
+                </span>
+                {% elif activity.type.lower() == 'cycling' %}
+                <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100">
+                    <i class="fas fa-bicycle text-blue-600 text-2xl"></i>
+                </span>
+                {% elif activity.type.lower() == 'swimming' %}
+                <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-cyan-100">
+                    <i class="fas fa-swimmer text-cyan-600 text-2xl"></i>
+                </span>
+                {% elif activity.type.lower() == 'walking' %}
+                <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-yellow-100">
+                    <i class="fas fa-walking text-yellow-600 text-2xl"></i>
+                </span>
+                {% elif activity.type.lower() == 'gym' %}
+                <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-100">
+                    <i class="fas fa-dumbbell text-purple-600 text-2xl"></i>
+                </span>
+                {% else %}
+                <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-200">
+                    <i class="fas fa-heartbeat text-gray-600 text-2xl"></i>
+                </span>
+                {% endif %}
+            </div>
+            <!-- Details -->
+            <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-lg font-semibold text-gray-900 dark:text-white">{{ activity.type }}</span>
+                    <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">{{ activity.duration }} min</span>
+                </div>
+                <div class="flex items-center gap-4 text-gray-600 dark:text-gray-400 text-sm">
+                    <span><i class="fas fa-fire-alt mr-1"></i> {{ activity.calories }} kcal</span>
+                    <span><i class="far fa-calendar-alt mr-1"></i> {{ activity.timestamp.strftime('%b %d, %Y %H:%M') }}</span>
+                </div>
+            </div>
+            <!-- Like/Comment -->
+            <div class="flex flex-col items-center gap-2">
+                <button class="like-btn text-pink-500 hover:text-pink-600 focus:outline-none"><i class="fas fa-heart"></i></button>
+                <button class="comment-btn text-blue-500 hover:text-blue-600 focus:outline-none"><i class="fas fa-comment"></i></button>
+            </div>
+        </div>
+        {% endfor %}
+        {% if not activities %}
+        <div class="text-center text-gray-500 py-12">No activities yet. Start tracking your fitness journey!</div>
+        {% endif %}
+    </div>
+
+    <!-- Community Support Section -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Community Support</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Leaderboard -->
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Leaderboard</h3>
+                <ul class="space-y-2">
+                    <li class="flex items-center justify-between">
+                        <span class="text-gray-700 dark:text-gray-300">1. John Doe</span>
+                        <span class="text-green-600">1200 kcal</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                        <span class="text-gray-700 dark:text-gray-300">2. Jane Smith</span>
+                        <span class="text-green-600">1100 kcal</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                        <span class="text-gray-700 dark:text-gray-300">3. Bob Johnson</span>
+                        <span class="text-green-600">1000 kcal</span>
+                    </li>
+                </ul>
+            </div>
+            <!-- Community Challenges -->
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Community Challenges</h3>
+                <ul class="space-y-2">
+                    <li class="text-gray-700 dark:text-gray-300">30-Day Running Challenge</li>
+                    <li class="text-gray-700 dark:text-gray-300">Weekly Cycling Goal</li>
+                    <li class="text-gray-700 dark:text-gray-300">Monthly Swimming Challenge</li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-4 text-center">
+            <a href="#" class="text-green-600 hover:text-green-700">Join the Community Forum</a>
+        </div>
+    </div>
+
+    <!-- Floating Add Button -->
+    <button onclick="showAddActivityModal()" class="fixed bottom-8 right-8 z-50 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center text-3xl focus:outline-none">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Add Activity Modal (reuse your existing modal code here) -->
+    <div id="addActivityModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-auto mt-20 relative">
+            <button onclick="hideAddActivityModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <h3 class="text-xl font-bold mb-4">Add New Activity</h3>
+            <form id="activityForm" class="space-y-4">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Activity Type</label>
+                    <select name="type" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                        <option value="">Select activity type</option>
+                        <option value="running">Running</option>
+                        <option value="cycling">Cycling</option>
+                        <option value="swimming">Swimming</option>
+                        <option value="walking">Walking</option>
+                        <option value="gym">Gym</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Duration (minutes)</label>
+                    <input type="number" name="duration" required min="1" max="1440" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Calories Burned</label>
+                    <input type="number" name="calories" required min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="hideAddActivityModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors duration-200">Cancel</button>
+                    <button type="submit" id="submitActivity" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200 flex items-center">
+                        <span>Save Activity</span>
+                        <svg id="loadingSpinner" class="hidden w-5 h-5 ml-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Font Awesome for icons (if not already included in base.html) -->
+<script src="https://kit.fontawesome.com/4b8b0b6b0a.js" crossorigin="anonymous"></script>
+<script>
+function showAddActivityModal() {
+    document.getElementById('addActivityModal').classList.remove('hidden');
+}
+function hideAddActivityModal() {
+    document.getElementById('addActivityModal').classList.add('hidden');
+}
+// Form submission with loading state
+if (document.getElementById('activityForm')) {
+    document.getElementById('activityForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitButton = document.getElementById('submitActivity');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        submitButton.disabled = true;
+        loadingSpinner.classList.remove('hidden');
+        
+        const formData = new FormData(e.target);
+        const data = {
+            type: formData.get('type'),
+            duration: parseInt(formData.get('duration')),
+            calories: parseInt(formData.get('calories'))
+        };
+
+        try {
+            const result = await api.createActivity(data);
+            if (result) {
+                showNotification('Activity added successfully', 'success');
+                hideAddActivityModal();
+                window.location.reload();
+            }
+        } catch (error) {
+            showNotification('Error adding activity', 'error');
+        } finally {
+            submitButton.disabled = false;
+            loadingSpinner.classList.add('hidden');
+        }
+    });
+}
+// Chart.js placeholder
+if (window.Chart) {
+    const ctx = document.getElementById('activityChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+                label: 'Minutes',
+                data: [30, 45, 20, 60, 50, 40, 35],
+                backgroundColor: 'rgba(16, 185, 129, 0.7)'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+}
+// Like/Comment button handlers (placeholder)
+document.querySelectorAll('.like-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        btn.classList.toggle('text-pink-600');
+    });
+});
+document.querySelectorAll('.comment-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        alert('Comment feature coming soon!');
+    });
+});
+</script>
+<!-- Chart.js CDN (for analytics chart) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
